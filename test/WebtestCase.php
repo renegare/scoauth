@@ -18,6 +18,7 @@ class WebTestCase extends \Silex\WebTestCase {
     public function createApplication($disableExceptionHandler = true)
     {
         $app = new Application();
+        $this->configureApplication($app);
 
         if($disableExceptionHandler) {
             $app['exception_handler']->disable();
@@ -26,12 +27,11 @@ class WebTestCase extends \Silex\WebTestCase {
         $app['debug'] = true;
         $app['session.test'] = true;
 
-        $this->configureApplication($app);
-
         return $app;
     }
 
     protected function configureApplication(Application $app) {
+        $app['logger'] = $this->getMockLogger();
 
         $app->register(new \Silex\Provider\SessionServiceProvider);
         $app->register(new \Silex\Provider\SecurityServiceProvider);
@@ -46,8 +46,7 @@ class WebTestCase extends \Silex\WebTestCase {
 
             'app' => [
                 'pattern' => '^/',
-                'scoauth' => true,
-                'stateless' => true
+                'scoauth' => true
             ]
         ];
 
@@ -58,8 +57,6 @@ class WebTestCase extends \Silex\WebTestCase {
         $app->get('/proteted-uri', function(){
             return 'All Good!';
         });
-
-        $app['logger'] = $this->getMockLogger();
     }
 
     public function getMockLogger() {

@@ -17,19 +17,28 @@ class ListenerTest extends WebTestCase {
             return 'All Good!';
         });
 
+        // mock out dependencies
         $this->mockClientApi = $this->getMock('Renegare\Scoauth\ClientInterface');
 
-        $app['scoauth.api'] = $this->mockClientApi;
+        $app['scoauth.api.client'] = $this->mockClientApi;
     }
 
     public function testAnonymousUserFlow() {
+        $expectedRedirecUri = '/security/scoauth/cb';
         $expectedAuthUrl = sprintf('http://api.com/auth?%s', http_build_query([
             'client_id' => 1,
             'response_type' => 'code',
-            'redirect_uri' => 'http://localhost/scoauth/security/app',
-            'scope' => 'all']));
-        $this->mockClientApi->expects($this->once())->method('getAuthUrl')->will($this->returnValue($expectedAuthUrl));
+            'redirect_uri' => 'http://localhost/security/scoauth/cb',
+            'scope' => 'all'
+        ]));
 
+        $mockToken = new \Renegare\Scoauth\Token();
+
+        $this->mockClientApi->expects($this->any())->method('getAuthUrl')->will($this->returnValue($expectedAuthUrl));
+        $this->mockClientApi->expects($this->any())->method('getRedirectUri')->will($this->returnValue($expectedRedirecUri));
+        $this->mockClientApi->expects($this->any())->method('createToken')->will($this->returnValue($mockToken));
+
+        // redirect to api
         $client = $this->createClient();
         $client->request('GET', '/protected-uri');
         $response = $client->getResponse();
@@ -37,7 +46,19 @@ class ListenerTest extends WebTestCase {
         $this->assertEquals(sprintf('http://api.com/auth?%s', http_build_query([
             'client_id' => 1,
             'response_type' => 'code',
-            'redirect_uri' => 'http://localhost/scoauth/security/app',
-            'scope' => 'all'])), $response->getTargetUrl());
+            'redirect_uri' => 'http://localhost/security/scoauth/cb',
+            'scope' => 'all'
+        ])), $response->getTargetUrl());
+
+        // handle auth code
+        $client->request('GET', '/security/scoauth/cb', ['code' => 'test-auth-code']);
+        $response = $client->getResponse();
+        $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+
+        // redirect to original target
+        $client->followRedirect();
+        $response = $client->getResponse();
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertEquals('All Good!', $response->getContent());
     }
 }
