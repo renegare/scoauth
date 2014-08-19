@@ -32,8 +32,7 @@ class ListenerTest extends WebTestCase {
             'scope' => 'all'
         ]));
 
-        $mockToken = new \Renegare\Scoauth\Token();
-
+        $mockToken = $this->getMockForAbstractClass('Renegare\Scoauth\Token');
         $this->mockClientApi->expects($this->any())->method('getAuthUrl')->will($this->returnValue($expectedAuthUrl));
         $this->mockClientApi->expects($this->any())->method('getRedirectUri')->will($this->returnValue($expectedRedirecUri));
         $this->mockClientApi->expects($this->any())->method('createToken')->will($this->returnValue($mockToken));
