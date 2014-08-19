@@ -6,7 +6,7 @@ use Silex\Application;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\BrowserKit\Cookie;
 
-class WebTestCase extends \Silex\WebTestCase {
+class WebtestCase extends \Silex\WebTestCase {
 
     private $mockLogger;
 

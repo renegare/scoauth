@@ -4,9 +4,8 @@ namespace Renegare\Scoauth\Test;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
-use Renegare\Scoauth\Test\WebTestCase;
 
-class ListenerTest extends WebTestCase {
+class ListenerTest extends WebtestCase {
 
     protected $mockClientApi;
 
