@@ -3,7 +3,7 @@
     "description": "Simple silex OAuth2 client",
     "keywords": ["oauth2", "client", "silex", "validator", "renegare"],
     "license": "MIT",
-    "autoload": {"psr-4": {"Renegare\\Soauth\\": "src"}},
+    "autoload": {"psr-4": {"Renegare\\Scoauth\\": "src"}},
 
     "require": {
         "php": ">=5.4.0",
