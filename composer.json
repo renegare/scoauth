@@ -1,6 +1,6 @@
 {
     "name": "renegare/soauth",
-    "description": "Simple silex OAuth2 client",
+    "description": "Simple silex security OAuth2 client",
     "keywords": ["oauth2", "client", "silex", "validator", "renegare"],
     "license": "MIT",
     "autoload": {"psr-4": {"Renegare\\Scoauth\\": "src"}},
