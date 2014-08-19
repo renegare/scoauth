@@ -1,5 +1,5 @@
 {
-    "name": "renegare/soauth",
+    "name": "renegare/scoauth",
     "description": "Simple silex security OAuth2 client",
     "keywords": ["oauth2", "client", "silex", "validator", "renegare"],
     "license": "MIT",
