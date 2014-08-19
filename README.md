@@ -4,7 +4,7 @@
 
 ### Phase v0.1.x
 
-* Authenticate
+* Authenticate // Done
 * Refresh access code
 * Handle Unauthorized Errors (redirect to login - make it configurable)
 * Fix bugs

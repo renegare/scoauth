@@ -43,7 +43,6 @@ class Listener implements ListenerInterface, LoggerInterface {
         } else {
             $request = $event->getRequest();
             $pathInfo = $request->getPathInfo();
-            $response = null;
             if($this->requiresAuthExcange($request)) {
                 $code = $request->query->get('code');
                 $this->debug('> Auth code recieved', ['path' => $pathInfo, 'code' => $code]);
@@ -56,9 +55,7 @@ class Listener implements ListenerInterface, LoggerInterface {
                 $originalRequestPath = $session->get('_scoauth_original_path', '/');
                 $session->remove('_scoauth_original_path');
                 $response = new RedirectResponse($originalRequestPath);
-            }
-
-            if(!$response) {
+            } else {
                 $this->debug('> Unauthorized request ... authentication via oauth required!', ['path' => $pathInfo]);
                 $request->getSession()->set('_scoauth_original_path', $request->getPathInfo());
                 $response = new RedirectResponse($this->client->getAuthUrl());
