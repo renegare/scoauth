@@ -16,7 +16,7 @@ before_script:
 
 script:
     - mkdir -p build/logs
-    - composer test -- --coverage-text --coverage-clover build/logs/clover.xml
+    - composer test -- --coverage-text
 
 after_script:
  - php vendor/bin/coveralls -v
