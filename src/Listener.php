@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 class Listener implements ListenerInterface, LoggerInterface {
     use LoggerTrait;
 
+    const ORIGINAL_PATH_KEY = '_scoauth_original_path';
     protected $firewallName;
     protected $securityContext;
     protected $client;
@@ -52,12 +53,12 @@ class Listener implements ListenerInterface, LoggerInterface {
                 $this->debug('Token authenticated', ['token' => $token]);
 
                 $session = $request->getSession();
-                $originalRequestPath = $session->get('_scoauth_original_path', '/');
-                $session->remove('_scoauth_original_path');
+                $originalRequestPath = $session->get(Listener::ORIGINAL_PATH_KEY, '/');
+                $session->remove(Listener::ORIGINAL_PATH_KEY);
                 $response = new RedirectResponse($originalRequestPath);
             } else {
                 $this->debug('> Unauthorized request ... authentication via oauth required!', ['path' => $pathInfo]);
-                $request->getSession()->set('_scoauth_original_path', $request->getPathInfo());
+                $request->getSession()->set(Listener::ORIGINAL_PATH_KEY, $request->getPathInfo());
                 $response = new RedirectResponse($this->client->getAuthUrl());
             }
 
