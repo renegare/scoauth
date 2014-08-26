@@ -13,6 +13,7 @@ class Listener implements ListenerInterface, LoggerInterface {
     use LoggerTrait;
 
     const ORIGINAL_PATH_KEY = '_scoauth_original_path';
+    
     protected $firewallName;
     protected $securityContext;
     protected $client;
